@@ -519,7 +519,7 @@
 
         async function loadQuestions() {
             try {
-                const response = await fetch('/docs/final-questions.json');
+                const response = await fetch('./docs/final-questions.json');
                 questions = await response.json();
                 console.log(`✅ تم تحميل ${questions.length} سؤال من الملفات الفعلية`);
             } catch (error) {

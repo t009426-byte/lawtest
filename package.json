@@ -1,13 +1,14 @@
 {
   "name": "lawtest",
-  "version": "1.0.0",
-  "description": "منصة الاختبارات القانونية - اختبار وظيفة النيابة العامة",
+  "version": "2.0.0",
+  "description": "منصة الاختبارات القانونية - اختبار وظيفة النيابة العامة (من الملفات الفعلية)",
   "type": "module",
-  "main": "index.html",
+  "main": "real-exam.html",
   "scripts": {
-    "start": "open index.html",
+    "start": "open real-exam.html",
     "dev": "python3 -m http.server 8888",
-    "build": "echo 'Building...'"
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "vercel"
   },
   "keywords": [
     "اختبار",
