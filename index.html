@@ -383,12 +383,14 @@
         }
 
         .review-screen {
+            display: none;
             background: white;
             border-radius: 12px;
             padding: 30px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
         }
 
         .review-header {
@@ -817,73 +819,102 @@
         }
 
         function showReview() {
-            document.getElementById('resultsScreen').style.display = 'none';
-            document.getElementById('reviewScreen').style.display = 'block';
-            generateReview();
+            const resultsScreen = document.getElementById('resultsScreen');
+            const reviewScreen = document.getElementById('reviewScreen');
+
+            if (resultsScreen) resultsScreen.style.display = 'none';
+            if (reviewScreen) {
+                reviewScreen.style.display = 'block';
+                generateReview();
+            } else {
+                console.error('❌ شاشة المراجعة غير موجودة');
+            }
         }
 
         function hideReview() {
-            document.getElementById('reviewScreen').style.display = 'none';
-            document.getElementById('resultsScreen').style.display = 'block';
+            const reviewScreen = document.getElementById('reviewScreen');
+            const resultsScreen = document.getElementById('resultsScreen');
+
+            if (reviewScreen) reviewScreen.style.display = 'none';
+            if (resultsScreen) resultsScreen.style.display = 'block';
         }
 
         function generateReview() {
             const reviewContainer = document.getElementById('reviewContainer');
+            if (!reviewContainer) {
+                console.error('❌ reviewContainer غير موجود');
+                return;
+            }
+
             reviewContainer.innerHTML = '';
 
-            let wrongCount = 0;
-            questions.forEach((q, idx) => {
-                const isCorrect = userAnswers[idx] === q.correct;
-                const hasAnswered = userAnswers[idx] !== undefined;
+            if (!questions || questions.length === 0) {
+                reviewContainer.innerHTML = '<p>❌ لا توجد أسئلة لعرضها</p>';
+                return;
+            }
 
-                // Show all wrong answers: either not answered or answered incorrectly
+            let wrongCount = 0;
+            let correctCount = 0;
+
+            questions.forEach((q, idx) => {
+                const userAnswer = userAnswers[idx];
+                const isCorrect = userAnswer === q.correct;
+
                 if (!isCorrect) {
                     wrongCount++;
                     const reviewItem = document.createElement('div');
                     reviewItem.className = 'review-item';
 
+                    // Question text
                     const questionDiv = document.createElement('div');
                     questionDiv.className = 'review-question';
                     questionDiv.innerHTML = `<span style="color: var(--danger);">❌ السؤال ${idx + 1}:</span> ${q.text}`;
                     reviewItem.appendChild(questionDiv);
 
-                    if (hasAnswered) {
-                        const userAnswer = document.createElement('div');
-                        userAnswer.className = 'review-answer incorrect';
-                        userAnswer.innerHTML = `<span class="answer-label">إجابتك:</span> ${q.options[userAnswers[idx]]}`;
-                        reviewItem.appendChild(userAnswer);
+                    // User's answer
+                    const userAnswerDiv = document.createElement('div');
+                    userAnswerDiv.className = 'review-answer incorrect';
+                    if (userAnswer !== undefined) {
+                        userAnswerDiv.innerHTML = `<span class="answer-label">إجابتك:</span> ${q.options[userAnswer]}`;
                     } else {
-                        const userAnswer = document.createElement('div');
-                        userAnswer.className = 'review-answer incorrect';
-                        userAnswer.innerHTML = `<span class="answer-label">لم تجب:</span> <em>لم تختر إجابة</em>`;
-                        reviewItem.appendChild(userAnswer);
+                        userAnswerDiv.innerHTML = `<span class="answer-label">لم تجب:</span> <em>لم تختر إجابة</em>`;
                     }
+                    reviewItem.appendChild(userAnswerDiv);
 
-                    const correctAnswer = document.createElement('div');
-                    correctAnswer.className = 'review-answer correct';
-                    correctAnswer.innerHTML = `<span class="answer-label">✅ الإجابة الصحيحة:</span> ${q.options[q.correct]}`;
-                    reviewItem.appendChild(correctAnswer);
+                    // Correct answer
+                    const correctAnswerDiv = document.createElement('div');
+                    correctAnswerDiv.className = 'review-answer correct';
+                    correctAnswerDiv.innerHTML = `<span class="answer-label">✅ الإجابة الصحيحة:</span> ${q.options[q.correct]}`;
+                    reviewItem.appendChild(correctAnswerDiv);
 
                     reviewContainer.appendChild(reviewItem);
+                } else {
+                    correctCount++;
                 }
             });
 
+            // Add header or success message
             if (wrongCount === 0) {
                 const message = document.createElement('div');
                 message.style.textAlign = 'center';
                 message.style.padding = '30px';
                 message.style.color = 'var(--success)';
+                message.style.fontSize = '1.2em';
                 message.innerHTML = '<h2>🎉 ممتاز! لم تخطئ في أي سؤال!</h2>';
                 reviewContainer.appendChild(message);
             } else {
                 const header = document.createElement('div');
-                header.style.padding = '10px';
+                header.style.padding = '15px';
                 header.style.textAlign = 'center';
-                header.style.color = 'var(--danger)';
+                header.style.color = 'white';
+                header.style.backgroundColor = 'var(--danger)';
                 header.style.marginBottom = '20px';
-                header.innerHTML = `<strong>عدد الأسئلة الخاطئة: ${wrongCount}</strong>`;
+                header.style.borderRadius = '8px';
+                header.innerHTML = `<strong>عدد الأسئلة الخاطئة: ${wrongCount} / 40</strong><br><small>الإجابات الصحيحة: ${correctCount} / 40</small>`;
                 reviewContainer.insertBefore(header, reviewContainer.firstChild);
             }
+
+            console.log(`✅ تم عرض المراجعة: ${wrongCount} خاطئة، ${correctCount} صحيحة`);
         }
 
         // Load on page load
