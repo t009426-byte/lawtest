@@ -1,0 +1,37 @@
+{
+  "name": "lawtest",
+  "version": "1.0.0",
+  "description": "منصة الاختبارات القانونية - اختبار وظيفة النيابة العامة",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "dev": "python3 -m http.server 8888",
+    "build": "echo 'Building...'"
+  },
+  "keywords": [
+    "اختبار",
+    "قانون",
+    "نيابة",
+    "تعليم",
+    "اختبارات قانونية"
+  ],
+  "author": {
+    "name": "Legal Test Platform",
+    "email": "t009426@coded.edu.kw"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/t009426-byte/lawtest",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t009426-byte/lawtest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/t009426-byte/lawtest/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

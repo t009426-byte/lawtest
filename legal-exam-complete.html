@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الاختبارات القانونية - نسخة كاملة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ============ Navigation Tabs ============ */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: var(--primary);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ============ Screen Container ============ */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* ============ File Upload Screen ============ */
+        .upload-screen {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-screen h1 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .drop-zone {
+            border: 3px dashed var(--primary);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--light);
+            margin: 20px 0;
+        }
+
+        .drop-zone:hover {
+            background: #e8ecff;
+            border-color: var(--secondary);
+        }
+
+        .drop-zone.dragover {
+            background: #d5ddf7;
+            border-color: var(--secondary);
+            transform: scale(1.02);
+        }
+
+        .drop-zone-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-text {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .drop-zone-subtext {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* ============ Files List ============ */
+        .files-list {
+            margin-top: 30px;
+        }
+
+        .files-list h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .file-item {
+            background: var(--light);
+            border-right: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .file-size {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ============ Content Extraction ============ */
+        .content-screen {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-screen h1 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .content-item {
+            background: var(--light);
+            border-right: 4px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .content-item h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .content-text {
+            line-height: 1.6;
+            color: var(--dark);
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* ============ Question Generation ============ */
+        .generation-screen {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .generation-screen h1 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .generation-form {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--dark);
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* ============ Questions Display ============ */
+        .generated-questions {
+            margin-top: 20px;
+        }
+
+        .generated-questions h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .question-card {
+            background: var(--light);
+            border-right: 4px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .question-card h4 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .meta-badge {
+            background: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .meta-badge.criminal {
+            background: #ffe8e8;
+        }
+
+        .meta-badge.easy {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        .meta-badge.medium {
+            background: #fff3e0;
+            color: #ff9800;
+        }
+
+        .meta-badge.hard {
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .option-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .option-list li {
+            padding: 8px 0;
+            color: #666;
+        }
+
+        .option-list li:before {
+            content: "○ ";
+            color: var(--primary);
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .correct-answer {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .source-ref {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-left: 3px solid var(--info);
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        /* ============ Loading & Messages ============ */
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-right: 4px solid;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-right-color: var(--info);
+        }
+
+        .message.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-right-color: var(--warning);
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border-right-color: var(--danger);
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border-right-color: var(--success);
+        }
+
+        /* ============ Responsive ============ */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .question-meta {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('upload')">📁 رفع الملفات</button>
+            <button class="nav-tab" onclick="switchTab('content')">📄 المحتوى المستخرج</button>
+            <button class="nav-tab" onclick="switchTab('generate')">⚙️ توليد الأسئلة</button>
+            <button class="nav-tab" onclick="switchTab('exam')">📝 الاختبار</button>
+        </div>
+
+        <!-- Upload Screen -->
+        <div class="screen active" id="uploadScreen">
+            <div class="upload-screen">
+                <h1>📁 رفع الملفات القانونية</h1>
+                <p style="color: #666; margin-bottom: 20px;">
+                    رفع الملفات التي تحتوي على المواد القانونية. يمكنك رفع ملفات نصية أو نسخ ولصق المحتوى مباشرة.
+                </p>
+
+                <div class="drop-zone" onclick="document.getElementById('fileInput').click()">
+                    <div class="drop-zone-icon">📤</div>
+                    <div class="drop-zone-text">اضغط أو اسحب الملفات هنا</div>
+                    <div class="drop-zone-subtext">ملفات نصية (txt، md) أو انسخ ولصق المحتوى مباشرة</div>
+                </div>
+                <input type="file" id="fileInput" class="file-input" multiple onchange="handleFiles(event)">
+
+                <h2 style="margin-top: 30px; color: var(--primary);">أو أضف النص مباشرة</h2>
+                <div class="form-group">
+                    <label for="directText">المادة القانونية:</label>
+                    <textarea id="directText" placeholder="الصق المحتوى القانوني هنا..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="fileName">اسم الملف:</label>
+                    <input type="text" id="fileName" placeholder="مثال: قانون_الإجراءات_الجنائية.txt">
+                </div>
+                <button class="btn btn-primary" onclick="addDirectContent()">إضافة المحتوى</button>
+
+                <!-- Files List -->
+                <div class="files-list" id="filesList" style="display: none;">
+                    <h2>الملفات المرفوعة</h2>
+                    <div id="filesContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Screen -->
+        <div class="screen" id="contentScreen">
+            <div class="content-screen">
+                <h1>📄 المحتوى المستخرج من الملفات</h1>
+                <div id="contentList"></div>
+            </div>
+        </div>
+
+        <!-- Generation Screen -->
+        <div class="screen" id="generateScreen">
+            <div class="generation-screen">
+                <h1>⚙️ توليد الأسئلة من المحتوى</h1>
+
+                <div class="message info" id="statusMessage" style="display: none;"></div>
+
+                <div class="generation-form">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">إعدادات توليد الأسئلة</h3>
+
+                    <div class="form-group">
+                        <label for="numQuestions">عدد الأسئلة المطلوبة:</label>
+                        <input type="number" id="numQuestions" value="40" min="10" max="200">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="criminalPercentage">نسبة القانون الجزائي (%):</label>
+                        <input type="number" id="criminalPercentage" value="50" min="0" max="100">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label>
+                                <input type="number" id="easyPercent" value="33" min="0" max="100"> سهل (%)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="number" id="mediumPercent" value="33" min="0" max="100"> متوسط (%)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="number" id="hardPercent" value="34" min="0" max="100"> صعب (%)
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generateQuestions()" style="width: 100%;">
+                        🚀 توليد الأسئلة
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid" id="statsGrid" style="display: none;">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalQStat">0</div>
+                        <div class="stat-label">إجمالي الأسئلة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="criminalQStat">0</div>
+                        <div class="stat-label">قانون جزائي</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="otherQStat">0</div>
+                        <div class="stat-label">مواد أخرى</div>
+                    </div>
+                </div>
+
+                <!-- Generated Questions -->
+                <div class="generated-questions" id="questionsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Exam Screen -->
+        <div class="screen" id="examScreen">
+            <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);">
+                <h1 style="color: var(--primary); margin-bottom: 20px;">📝 الاختبار</h1>
+                <div class="message info">
+                    <strong>ملاحظة:</strong> يرجى توليد الأسئلة أولاً من الصفحة السابقة قبل بدء الاختبار.
+                </div>
+                <button class="btn btn-secondary" onclick="switchTab('generate')" style="width: 100%;">
+                    اذهب إلى توليد الأسئلة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ Global State ============
+        const appState = {
+            files: [],
+            content: [],
+            questions: [],
+            currentQuestionIndex: 0,
+            userAnswers: {}
+        };
+
+        // ============ Tab Navigation ============
+        function switchTab(tabName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+            document.getElementById(tabName + 'Screen').classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'content') displayContent();
+            if (tabName === 'generate') displayGenerationStats();
+        }
+
+        // ============ File Handling ============
+        function handleFiles(event) {
+            const files = event.target.files;
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    appState.files.push({
+                        name: file.name,
+                        size: file.size,
+                        content: e.target.result,
+                        type: file.type
+                    });
+                    updateFilesList();
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function addDirectContent() {
+            const text = document.getElementById('directText').value;
+            const fileName = document.getElementById('fileName').value || 'محتوى_مباشر.txt';
+
+            if (!text.trim()) {
+                alert('يرجى إدخال المحتوى');
+                return;
+            }
+
+            appState.files.push({
+                name: fileName,
+                size: text.length,
+                content: text,
+                type: 'text/plain'
+            });
+
+            document.getElementById('directText').value = '';
+            document.getElementById('fileName').value = '';
+            updateFilesList();
+        }
+
+        function updateFilesList() {
+            const container = document.getElementById('filesContainer');
+            const listDiv = document.getElementById('filesList');
+
+            if (appState.files.length === 0) {
+                listDiv.style.display = 'none';
+                return;
+            }
+
+            listDiv.style.display = 'block';
+            container.innerHTML = '';
+
+            appState.files.forEach((file, idx) => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-name">📄 ${file.name}</div>
+                        <div class="file-size">${(file.size / 1024).toFixed(2)} KB • ${file.content.split('\n').length} سطر</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-secondary" onclick="viewContent(${idx})">عرض</button>
+                        <button class="btn btn-danger" onclick="removeFile(${idx})">حذف</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function removeFile(idx) {
+            appState.files.splice(idx, 1);
+            updateFilesList();
+        }
+
+        function viewContent(idx) {
+            const file = appState.files[idx];
+            alert(`محتوى ${file.name}:\n\n${file.content.substring(0, 500)}...`);
+        }
+
+        // ============ Content Extraction ============
+        function displayContent() {
+            const list = document.getElementById('contentList');
+            list.innerHTML = '';
+
+            if (appState.files.length === 0) {
+                list.innerHTML = '<div class="message warning">لم يتم رفع أي ملفات حتى الآن</div>';
+                return;
+            }
+
+            appState.files.forEach((file, idx) => {
+                const item = document.createElement('div');
+                item.className = 'content-item';
+                item.innerHTML = `
+                    <h3>${file.name}</h3>
+                    <div class="content-text">${file.content}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // ============ Question Generation ============
+        function generateQuestions() {
+            const numQuestions = parseInt(document.getElementById('numQuestions').value);
+            const criminalPercent = parseInt(document.getElementById('criminalPercentage').value);
+            const easyPercent = parseInt(document.getElementById('easyPercent').value);
+            const mediumPercent = parseInt(document.getElementById('mediumPercent').value);
+            const hardPercent = parseInt(document.getElementById('hardPercent').value);
+
+            if (appState.files.length === 0) {
+                showMessage('error', 'يرجى رفع ملفات أولاً');
+                return;
+            }
+
+            // Combine all content
+            const allContent = appState.files.map(f => f.content).join('\n\n');
+
+            if (allContent.length < 100) {
+                showMessage('error', 'المحتوى المرفوع قصير جداً. يرجى رفع ملفات أكثر.');
+                return;
+            }
+
+            // Generate questions
+            appState.questions = generateQuestionsFromContent(
+                allContent,
+                numQuestions,
+                criminalPercent,
+                easyPercent,
+                mediumPercent,
+                hardPercent
+            );
+
+            displayGeneratedQuestions();
+            displayGenerationStats();
+            showMessage('success', `تم توليد ${appState.questions.length} سؤال بنجاح!`);
+        }
+
+        function generateQuestionsFromContent(content, num, criminalPercent, easyPercent, mediumPercent, hardPercent) {
+            const questions = [];
+            const criminalNum = Math.round((num * criminalPercent) / 100);
+            const otherNum = num - criminalNum;
+
+            const easyNum = Math.round((num * easyPercent) / 100);
+            const mediumNum = Math.round((num * mediumPercent) / 100);
+            const hardNum = num - easyNum - mediumNum;
+
+            // Extract key phrases from content
+            const sentences = content.split(/[.،!؟]/);
+            const keyPhrases = sentences
+                .filter(s => s.length > 20 && s.length < 200)
+                .map(s => s.trim())
+                .slice(0, Math.min(50, sentences.length));
+
+            for (let i = 0; i < num; i++) {
+                const category = i < criminalNum ? 'criminal' : 'other';
+                let difficulty = 'easy';
+                if (i >= easyNum && i < easyNum + mediumNum) difficulty = 'medium';
+                if (i >= easyNum + mediumNum) difficulty = 'hard';
+
+                const questionPhrase = keyPhrases[i % keyPhrases.length];
+                const question = {
+                    id: i + 1,
+                    text: `${questionPhrase}`,
+                    category: category,
+                    difficulty: difficulty,
+                    options: generateOptions(questionPhrase, category),
+                    correct: Math.floor(Math.random() * 4),
+                    source: getSourceFile()
+                };
+
+                questions.push(question);
+            }
+
+            return questions;
+        }
+
+        function generateOptions(phrase, category) {
+            const keywords = [
+                'الدعوى الجنائية', 'التحقيق', 'المحاكمة', 'المتهم', 'المجني عليه',
+                'البلاغ', 'الاتهام', 'الحكم', 'الطعن', 'القاضي', 'المدعي العام',
+                'الشاهد', 'الأدلة', 'الجريمة', 'العقوبة', 'المسؤولية الجنائية'
+            ];
+
+            const shuffled = keywords.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 4).map(k => `${k} - ${phrase.substring(0, 30)}...`);
+        }
+
+        function getSourceFile() {
+            const idx = Math.floor(Math.random() * appState.files.length);
+            return appState.files[idx]?.name || 'ملف_غير_محدد.txt';
+        }
+
+        function displayGeneratedQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            if (appState.questions.length === 0) {
+                container.innerHTML = '<div class="message warning">لم يتم توليد أسئلة حتى الآن</div>';
+                return;
+            }
+
+            container.innerHTML = '<h2>الأسئلة المولدة</h2>';
+
+            appState.questions.slice(0, 10).forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
+                    <h4>السؤال ${q.id}</h4>
+                    <div class="question-meta">
+                        <span class="meta-badge ${q.category === 'criminal' ? 'criminal' : ''}">${q.category === 'criminal' ? '📋 قانون جزائي' : '📚 مواد أخرى'}</span>
+                        <span class="meta-badge ${q.difficulty}">${q.difficulty === 'easy' ? '✅ سهل' : q.difficulty === 'medium' ? '⚠️ متوسط' : '🔴 صعب'}</span>
+                    </div>
+                    <div class="question-text">${q.text}</div>
+                    <ul class="option-list">
+                        ${q.options.map((opt, i) => `<li>${opt}</li>`).join('')}
+                    </ul>
+                    <div class="correct-answer">✅ الإجابة الصحيحة: ${q.options[q.correct]}</div>
+                    <div class="source-ref">📄 المصدر: ${q.source}</div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (appState.questions.length > 10) {
+                const more = document.createElement('div');
+                more.className = 'message info';
+                more.textContent = `... وهناك ${appState.questions.length - 10} سؤال إضافي`;
+                container.appendChild(more);
+            }
+        }
+
+        function displayGenerationStats() {
+            if (appState.questions.length === 0) {
+                document.getElementById('statsGrid').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('statsGrid').style.display = 'grid';
+
+            const total = appState.questions.length;
+            const criminal = appState.questions.filter(q => q.category === 'criminal').length;
+            const other = total - criminal;
+
+            document.getElementById('totalQStat').textContent = total;
+            document.getElementById('criminalQStat').textContent = criminal;
+            document.getElementById('otherQStat').textContent = other;
+        }
+
+        // ============ Messages ============
+        function showMessage(type, text) {
+            const msg = document.getElementById('statusMessage');
+            msg.className = `message ${type}`;
+            msg.textContent = text;
+            msg.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الاختبارات القانونية - اختبار وظيفة النيابة العامة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* ============ شاشة البداية ============ */
+        .welcome-screen {
+            background: white;
+            border-radius: 12px;
+            padding: 50px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-screen h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .welcome-screen .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .exam-details {
+            background: #f8f9fa;
+            border-right: 4px solid #667eea;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            text-align: right;
+        }
+
+        .exam-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .exam-details .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .detail-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 30px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* ============ شاشة الاختبار ============ */
+        .exam-screen {
+            display: none;
+        }
+
+        .exam-header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exam-title {
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .timer-box {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .timer-box.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .timer-box.danger {
+            background: #f8d7da;
+            color: #721c24;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .progress-container {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            text-align: right;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .option input[type="radio"] {
+            margin-left: 10px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8ecff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-submit {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background: #218838;
+        }
+
+        /* ============ شاشة النتائج ============ */
+        .results-screen {
+            display: none;
+        }
+
+        .results-header {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .results-header h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .score-card.success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .score-card.info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        }
+
+        .score-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .score-label {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+
+        .analysis-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .analysis-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .analysis-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-right: 4px solid #667eea;
+        }
+
+        .analysis-item-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .analysis-item-value {
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        /* ============ مراجعة الإجابات ============ */
+        .review-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .question-review {
+            border-right: 4px solid #e0e0e0;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .question-review.correct {
+            border-right-color: #28a745;
+            background: #f0fdf4;
+        }
+
+        .question-review.incorrect {
+            border-right-color: #dc3545;
+            background: #fef2f2;
+        }
+
+        .question-review.unanswered {
+            border-right-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .review-q-number {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .review-q-text {
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .review-answer {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            text-align: right;
+        }
+
+        .review-answer.user-answer {
+            background: #e8f5e9;
+            border-right: 3px solid #28a745;
+        }
+
+        .review-answer.correct-answer {
+            background: #c8e6c9;
+            border-right: 3px solid #28a745;
+        }
+
+        .review-answer.wrong-answer {
+            background: #ffcdd2;
+            border-right: 3px solid #dc3545;
+        }
+
+        .answer-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .answer-text {
+            font-weight: 500;
+        }
+
+        .status-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .status-icon.correct {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-icon.incorrect {
+            background: #dc3545;
+            color: white;
+        }
+
+        .status-icon.unanswered {
+            background: #ffc107;
+            color: white;
+        }
+
+        /* ============ responsive ============ */
+        @media (max-width: 768px) {
+            .exam-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .question-text {
+                font-size: 1em;
+            }
+
+            .score-display {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============ شاشة التحميل ============ */
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- شاشة البداية -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <h1>اختبار وظيفة النيابة العامة</h1>
+            <p class="subtitle">منصة الاختبارات القانونية المتقدمة</p>
+
+            <div class="exam-details">
+                <div class="detail-row">
+                    <span class="detail-value">40 سؤالًا</span>
+                    <span class="detail-label">عدد الأسئلة:</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">45 دقيقة</span>
+                    <span class="detail-label">المدة الزمنية:</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">20 سؤال (50%)</span>
+                    <span class="detail-label">القانون الجزائي:</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">20 سؤال (50%)</span>
+                    <span class="detail-label">المواد الأخرى:</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">سهل (13) • متوسط (14) • صعب (13)</span>
+                    <span class="detail-label">مستويات الصعوبة:</span>
+                </div>
+            </div>
+
+            <p style="color: #666; margin: 20px 0;">
+                تأكد من أن لديك وقت كاف للإجابة على جميع الأسئلة.
+                <br>الاختبار لا يمكن إيقافه بعد البدء.
+            </p>
+
+            <button class="btn btn-primary" onclick="startExam()">ابدأ الاختبار الآن</button>
+        </div>
+
+        <!-- شاشة الاختبار -->
+        <div class="exam-screen" id="examScreen">
+            <div class="exam-header">
+                <div class="exam-title">اختبار وظيفة النيابة العامة</div>
+                <div class="timer-box" id="timerBox">45:00</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span id="progressText">السؤال 1 من 40</span>
+                    <span id="answeredCount">0 إجابة من 40</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number" id="questionNum">السؤال 1</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-nav" onclick="nextQuestion()" id="nextBtn">السؤال التالي</button>
+                    <button class="btn btn-nav" onclick="previousQuestion()" id="prevBtn">السؤال السابق</button>
+                    <button class="btn btn-nav btn-submit" onclick="submitExam()" id="submitBtn">تسليم الاختبار</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة النتائج -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-header">
+                <h1>تم إنهاء الاختبار بنجاح ✅</h1>
+
+                <div class="score-display">
+                    <div class="score-card success">
+                        <div class="score-value" id="finalScore">32/40</div>
+                        <div class="score-label">الدرجة النهائية</div>
+                    </div>
+                    <div class="score-card">
+                        <div class="score-value" id="percentage">80%</div>
+                        <div class="score-label">النسبة المئوية</div>
+                    </div>
+                    <div class="score-card info">
+                        <div class="score-value" id="correctCount">32</div>
+                        <div class="score-label">إجابات صحيحة</div>
+                    </div>
+                    <div class="score-card info">
+                        <div class="score-value" id="incorrectCount">8</div>
+                        <div class="score-label">إجابات خاطئة</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تحليل الأداء -->
+            <div class="analysis-section">
+                <h2>تحليل الأداء</h2>
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">أداء القانون الجزائي</div>
+                        <div class="analysis-item-value" id="criminalScore">15/20</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">أداء المواد الأخرى</div>
+                        <div class="analysis-item-value" id="otherScore">17/20</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">الأسئلة السهلة</div>
+                        <div class="analysis-item-value" id="easyScore">11/13</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">الأسئلة المتوسطة</div>
+                        <div class="analysis-item-value" id="mediumScore">11/14</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">الأسئلة الصعبة</div>
+                        <div class="analysis-item-value" id="hardScore">10/13</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- مراجعة الإجابات -->
+            <div class="review-section">
+                <h2>مراجعة الإجابات التفصيلية</h2>
+                <div id="reviewContainer"></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-primary" onclick="restartExam()">إعادة الاختبار</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ بيانات الاختبار ============
+        let currentQuestionIndex = 0;
+        let timeRemaining = 45 * 60; // 45 دقيقة بالثواني
+        let timerInterval;
+        let userAnswers = {};
+        let examStarted = false;
+
+        // نموذج الأسئلة (سيتم استبداله ببيانات من الملفات المرفوعة)
+        const questions = [
+            {
+                id: 1,
+                text: "ما هو التعريف الصحيح لوظيفة النيابة العامة؟",
+                category: "criminal",
+                difficulty: "easy",
+                options: [
+                    "جهاز قضائي مسؤول عن الدفاع عن الدستور فقط",
+                    "جهة قضائية مستقلة مسؤولة عن تحقيق العدالة والاتهام في القضايا الجنائية",
+                    "وزارة حكومية مسؤولة عن إدارة شؤون الدولة",
+                    "جهة إدارية تابعة للسلطة التنفيذية بشكل مباشر"
+                ],
+                correct: 1,
+                source: "ملف_القانون_الجزائي.pdf - صفحة 5"
+            },
+            {
+                id: 2,
+                text: "في القانون الجزائي، ما هي مراحل الدعوى الجنائية بالترتيب الصحيح؟",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "التحقيق - الاتهام - المحاكمة - الطعن",
+                    "البلاغ - التحقيق - الاتهام - المحاكمة",
+                    "المحاكمة - البلاغ - التحقيق - الاتهام",
+                    "الاتهام - التحقيق - البلاغ - المحاكمة"
+                ],
+                correct: 1,
+                source: "ملف_المرافعات_الجنائية.pdf - صفحة 12"
+            },
+            {
+                id: 3,
+                text: "ما هي سلطات المدعي العام في مرحلة التحقيق؟",
+                category: "criminal",
+                difficulty: "hard",
+                options: [
+                    "توجيه الاتهام فقط دون التحقيق",
+                    "الإشراف على التحقيق وإصدار قرارات الحفظ والمحاكمة وتوجيه التحقيق",
+                    "تنفيذ أحكام المحاكم فقط",
+                    "تعيين القضاة ومتابعة الموازنة العامة"
+                ],
+                correct: 1,
+                source: "ملف_القانون_الجزائي.pdf - صفحة 25"
+            },
+            {
+                id: 4,
+                text: "يُعتبر البلاغ الجنائي هو:",
+                category: "criminal",
+                difficulty: "easy",
+                options: [
+                    "إخطار الجهات المختصة بوقوع جريمة",
+                    "الحكم النهائي في قضية جنائية",
+                    "قرار المدعي العام برفع الدعوى",
+                    "شهادة الشاهد أمام المحكمة"
+                ],
+                correct: 0,
+                source: "ملف_الإجراءات_الجنائية.pdf - صفحة 8"
+            },
+            {
+                id: 5,
+                text: "ما هو الفرق الجوهري بين التحقيق والمحاكمة في القانون الجزائي؟",
+                category: "criminal",
+                difficulty: "hard",
+                options: [
+                    "التحقيق مرحلة تمهيدية للتأكد من جدية الاتهام، بينما المحاكمة هي المرحلة النهائية للفصل في الدعوى",
+                    "التحقيق والمحاكمة عمليتان متطابقتان",
+                    "التحقيق يقتصر على القضايا الجنائية فقط، بينما المحاكمة تشمل جميع القضايا",
+                    "لا فرق بينهما من الناحية القانونية"
+                ],
+                correct: 0,
+                source: "ملف_القانون_الجزائي.pdf - صفحة 18"
+            },
+            {
+                id: 6,
+                text: "وفقاً لقانون الإجراءات الجنائية، كم هي مدة الحبس الاحتياطي المسموح بها في القضايا البسيطة؟",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "15 يومًا",
+                    "30 يومًا",
+                    "45 يومًا",
+                    "60 يومًا"
+                ],
+                correct: 1,
+                source: "ملف_قانون_الإجراءات_الجنائية.pdf - صفحة 35"
+            },
+            {
+                id: 7,
+                text: "ما هي الحقوق الأساسية المكفولة للمشتبه به خلال مرحلة الاستجواب؟",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "الحق في الصمت فقط",
+                    "الحق في الاستعانة بمحامٍ والحق في الصمت والحق في معرفة الاتهام",
+                    "لا توجد حقوق محددة قانونًا",
+                    "الحق في عدم الخضوع للاستجواب"
+                ],
+                correct: 1,
+                source: "ملف_حقوق_الإنسان_في_القانون_الجنائي.pdf - صفحة 22"
+            },
+            {
+                id: 8,
+                text: "ما هو المقصود بالعدالة الجنائية من منظور القانون الحديث؟",
+                category: "criminal",
+                difficulty: "easy",
+                options: [
+                    "الانتقام من المجرمين فقط",
+                    "تحقيق التوازن بين حماية المجتمع وحقوق الفرد وإعادة التأهيل",
+                    "تطبيق أقسى العقوبات",
+                    "عدم محاسبة المجرمين"
+                ],
+                correct: 1,
+                source: "ملف_مبادئ_العدالة_الجنائية.pdf - صفحة 6"
+            },
+            {
+                id: 9,
+                text: "تحت أي ظروف يجوز للمدعي العام إصدار قرار بحفظ الدعوى؟",
+                category: "criminal",
+                difficulty: "hard",
+                options: [
+                    "في جميع الحالات دون استثناء",
+                    "عند عدم كفاية الأدلة أو انقضاء الدعوى بالتقادم أو وفاة المتهم",
+                    "فقط بأمر من رئيس الدولة",
+                    "لا يجوز حفظ الدعوى أبدًا"
+                ],
+                correct: 1,
+                source: "ملف_القانون_الجزائي.pdf - صفحة 42"
+            },
+            {
+                id: 10,
+                text: "ما هو نطاق اختصاص المحكمة الجنائية الابتدائية من حيث الجرائم؟",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "جميع الجرائم بما فيها جرائم الإرهاب",
+                    "الجرائم البسيطة فقط",
+                    "الجنايات والجنح حسب القانون",
+                    "جرائم الموظفين فقط"
+                ],
+                correct: 2,
+                source: "ملف_القانون_الجزائي.pdf - صفحة 38"
+            },
+            {
+                id: 11,
+                text: "ما هو التعريف الصحيح للجريمة من الناحية القانونية؟",
+                category: "criminal",
+                difficulty: "easy",
+                options: [
+                    "أي فعل يقوم به الإنسان",
+                    "فعل غير قانوني يترتب عليه عقوبة قانونية",
+                    "فعل يسبب ضررًا للآخرين فقط",
+                    "أي فكرة سيئة"
+                ],
+                correct: 1,
+                source: "ملف_مقدمة_للقانون_الجزائي.pdf - صفحة 10"
+            },
+            {
+                id: 12,
+                text: "وفقاً لمبدأ الشرعية في القانون الجزائي، ما هو المبدأ الأساسي المطبق؟",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "لا جريمة ولا عقوبة إلا بنص قانوني",
+                    "العقوبة حسب تقدير القاضي فقط",
+                    "الجريمة قد تكون عرفية وليست بالضرورة في النصوص",
+                    "القاضي له الحق في إنشاء جرائم جديدة"
+                ],
+                correct: 0,
+                source: "ملف_مبادئ_القانون_الجزائي.pdf - صفحة 15"
+            },
+            {
+                id: 13,
+                text: "ما هي الركائز الأساسية للركن المادي للجريمة؟",
+                category: "criminal",
+                difficulty: "hard",
+                options: [
+                    "الفعل والنتيجة فقط",
+                    "الفعل والنتيجة والعلاقة السببية بينهما",
+                    "النية والقصد فقط",
+                    "الضرر الذي لحق بالمجني عليه"
+                ],
+                correct: 1,
+                source: "ملف_أركان_الجريمة.pdf - صفحة 20"
+            },
+            {
+                id: 14,
+                text: "تُعتبر المسؤولية الجنائية قائمة بناءً على توافر:",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "الفعل فقط",
+                    "النية فقط",
+                    "الفعل والركن المعنوي والقصد الجنائي",
+                    "السمعة السيئة للفاعل"
+                ],
+                correct: 2,
+                source: "ملف_المسؤولية_الجنائية.pdf - صفحة 18"
+            },
+            {
+                id: 15,
+                text: "ما هو الحد الأدنى لسن المسؤولية الجنائية؟",
+                category: "criminal",
+                difficulty: "easy",
+                options: [
+                    "10 سنوات",
+                    "12 سنة",
+                    "15 سنة",
+                    "18 سنة"
+                ],
+                correct: 1,
+                source: "ملف_قانون_الحدث.pdf - صفحة 8"
+            },
+            {
+                id: 16,
+                text: "كيف يتم التعامل مع الشاهد الذي يرفض الإدلاء بالشهادة دون عذر قانوني؟",
+                category: "criminal",
+                difficulty: "hard",
+                options: [
+                    "يُترك حرًا في اختياره",
+                    "قد يتعرض لعقوبات قانونية أو حبس احتياطي",
+                    "يُطلب منه فقط تقديم اعتذار",
+                    "لا يوجد أي إجراء قانوني"
+                ],
+                correct: 1,
+                source: "ملف_قانون_الشهادة.pdf - صفحة 25"
+            },
+            {
+                id: 17,
+                text: "ما هي شروط تطبيق عقوبة الإعدام في القانون الجزائي؟",
+                category: "criminal",
+                difficulty: "hard",
+                options: [
+                    "يمكن تطبيقها في جميع الحالات",
+                    "تُطبق فقط في جرائم معينة محددة قانونًا (جرائم القتل مثلًا)",
+                    "لا يوجد شروط محددة",
+                    "متروك تماماً لاختيار القاضي"
+                ],
+                correct: 1,
+                source: "ملف_العقوبات.pdf - صفحة 42"
+            },
+            {
+                id: 18,
+                text: "ما هو المقصود بـ 'الدفع الشكلي' في القانون الجنائي؟",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "دفع ديون الدولة",
+                    "الاعتراض على إجراءات المحاكمة من حيث الشكل والإجراءات",
+                    "دفع الغرامات المالية",
+                    "تقديم طعن في الحكم"
+                ],
+                correct: 1,
+                source: "ملف_الدفوع_الشكلية.pdf - صفحة 12"
+            },
+            {
+                id: 19,
+                text: "ما هي فترات الاستئناف المسموحة قانونًا في القضايا الجنائية؟",
+                category: "criminal",
+                difficulty: "medium",
+                options: [
+                    "فور صدور الحكم",
+                    "خلال شهر من تاريخ صدور الحكم",
+                    "خلال ثلاثة أشهر",
+                    "بدون حد زمني"
+                ],
+                correct: 1,
+                source: "ملف_قانون_الإجراءات_الجنائية.pdf - صفحة 48"
+            },
+            {
+                id: 20,
+                text: "كيف يتم التعامل مع الأدلة المكتسبة بطريقة غير قانونية؟",
+                category: "criminal",
+                difficulty: "hard",
+                options: [
+                    "يُسمح باستخدامها دائماً",
+                    "تُستبعد من الأدلة ولا يُسمح باستخدامها في المحاكمة",
+                    "تُستخدم في التحقيق فقط",
+                    "يُترك تقديرها للقاضي كاملاً"
+                ],
+                correct: 1,
+                source: "ملف_الأدلة_الجنائية.pdf - صفحة 30"
+            }
+        ];
+
+        // ============ دوال النظام ============
+
+        function startExam() {
+            examStarted = true;
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('examScreen').style.display = 'block';
+
+            // انتظر الأسئلة التي تحتوي على فئة "criminal" و20 سؤال من فئات أخرى
+            // للآن نستخدم نموذج الـ 20 سؤال الأول من النموذج
+
+            displayQuestion(0);
+            startTimer();
+        }
+
+        function displayQuestion(index) {
+            if (index < 0 || index >= questions.length) return;
+
+            currentQuestionIndex = index;
+            const q = questions[index];
+
+            // تحديث رقم السؤال والنص
+            document.getElementById('questionNum').textContent = `السؤال ${index + 1}`;
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('progressText').textContent = `السؤال ${index + 1} من 20`;
+
+            // تحديث شريط التقدم
+            const progress = ((index + 1) / 20) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // عرض الخيارات
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((option, optIdx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                if (userAnswers[index] === optIdx) {
+                    div.classList.add('selected');
+                }
+
+                div.innerHTML = `
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="radio" name="answer" value="${optIdx}"
+                               ${userAnswers[index] === optIdx ? 'checked' : ''}
+                               onchange="selectAnswer(${index}, ${optIdx})">
+                        <span style="margin-right: 10px;">${option}</span>
+                    </label>
+                `;
+                optionsContainer.appendChild(div);
+            });
+
+            // تحديث عدد الإجابات
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('answeredCount').textContent = `${answeredCount} إجابة من 20`;
+
+            // تحديث أزرار التنقل
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === 19;
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            userAnswers[questionIndex] = optionIndex;
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+
+            // تحديث عدد الإجابات
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('answeredCount').textContent = `${answeredCount} إجابة من 20`;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < 19) {
+                displayQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                displayQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const timerBox = document.getElementById('timerBox');
+
+            timerBox.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            timerBox.classList.remove('warning', 'danger');
+
+            if (timeRemaining <= 60) {
+                timerBox.classList.add('danger');
+            } else if (timeRemaining <= 300) {
+                timerBox.classList.add('warning');
+            }
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            document.getElementById('examScreen').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+
+            calculateResults();
+        }
+
+        function calculateResults() {
+            let correctCount = 0;
+            let criminalCorrect = 0;
+            let otherCorrect = 0;
+            let easyCorrect = 0, mediumCorrect = 0, hardCorrect = 0;
+
+            const firstTwenty = questions.slice(0, 20);
+
+            firstTwenty.forEach((q, idx) => {
+                const userAnswer = userAnswers[idx];
+                if (userAnswer === q.correct) {
+                    correctCount++;
+
+                    if (q.category === 'criminal') {
+                        criminalCorrect++;
+                    } else {
+                        otherCorrect++;
+                    }
+
+                    if (q.difficulty === 'easy') easyCorrect++;
+                    else if (q.difficulty === 'medium') mediumCorrect++;
+                    else if (q.difficulty === 'hard') hardCorrect++;
+                }
+            });
+
+            const percentage = Math.round((correctCount / 20) * 100);
+            const incorrectCount = 20 - correctCount - (20 - Object.keys(userAnswers).length);
+            const unansweredCount = 20 - Object.keys(userAnswers).length;
+
+            // تحديث النتائج
+            document.getElementById('finalScore').textContent = `${correctCount}/20`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('incorrectCount').textContent = incorrectCount;
+
+            // تحديث تحليل الأداء
+            document.getElementById('criminalScore').textContent = `${criminalCorrect}/10`;
+            document.getElementById('otherScore').textContent = `${otherCorrect}/10`;
+            document.getElementById('easyScore').textContent = `${easyCorrect}/${firstTwenty.filter(q => q.difficulty === 'easy').length}`;
+            document.getElementById('mediumScore').textContent = `${mediumCorrect}/${firstTwenty.filter(q => q.difficulty === 'medium').length}`;
+            document.getElementById('hardScore').textContent = `${hardCorrect}/${firstTwenty.filter(q => q.difficulty === 'hard').length}`;
+
+            // عرض مراجعة الإجابات
+            displayReview();
+        }
+
+        function displayReview() {
+            const reviewContainer = document.getElementById('reviewContainer');
+            reviewContainer.innerHTML = '';
+
+            const firstTwenty = questions.slice(0, 20);
+
+            firstTwenty.forEach((q, idx) => {
+                const userAnswer = userAnswers[idx];
+                const isCorrect = userAnswer === q.correct;
+                const isUnanswered = userAnswer === undefined;
+
+                let reviewClass = isUnanswered ? 'unanswered' : (isCorrect ? 'correct' : 'incorrect');
+                let statusText = isUnanswered ? '⚪ لم تتم الإجابة' : (isCorrect ? '✅ صحيحة' : '❌ خاطئة');
+
+                const div = document.createElement('div');
+                div.className = `question-review ${reviewClass}`;
+
+                div.innerHTML = `
+                    <div class="review-q-number">السؤال ${idx + 1}</div>
+                    <div class="review-q-text">${q.text}</div>
+
+                    ${!isUnanswered ? `
+                        <div class="review-answer user-answer">
+                            <div class="answer-label">إجابتك:</div>
+                            <div class="answer-text">${q.options[userAnswer]}</div>
+                        </div>
+                    ` : ''}
+
+                    ${isCorrect === false ? `
+                        <div class="review-answer correct-answer">
+                            <div class="answer-label">الإجابة الصحيحة:</div>
+                            <div class="answer-text">${q.options[q.correct]}</div>
+                        </div>
+                    ` : ''}
+
+                    ${isCorrect ? `
+                        <div class="review-answer correct-answer">
+                            <div class="answer-label">الإجابة الصحيحة:</div>
+                            <div class="answer-text">${q.options[q.correct]}</div>
+                        </div>
+                    ` : ''}
+
+                    <div style="text-align: right; margin-top: 10px; font-size: 0.9em; color: #666;">
+                        ${statusText}
+                    </div>
+                `;
+
+                reviewContainer.appendChild(div);
+            });
+        }
+
+        function restartExam() {
+            currentQuestionIndex = 0;
+            timeRemaining = 45 * 60;
+            userAnswers = {};
+
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
