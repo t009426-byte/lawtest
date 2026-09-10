@@ -545,7 +545,36 @@
             ];
         }
 
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function shuffleQuestions() {
+            // Shuffle question order
+            questions = shuffleArray(questions);
+
+            // Shuffle options within each question and update correct answer index
+            questions.forEach(q => {
+                const correctAnswer = q.options[q.correct];
+                const shuffledOptions = shuffleArray(q.options);
+                q.options = shuffledOptions;
+                q.correct = q.options.indexOf(correctAnswer);
+            });
+
+            console.log('✅ تم خلط الأسئلة والخيارات بنجاح');
+        }
+
         function startExam() {
+            shuffleQuestions();
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            timeRemaining = 45 * 60;
+
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('examScreen').style.display = 'block';
             displayQuestion(0);
