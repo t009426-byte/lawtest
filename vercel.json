@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "buildCommand": "echo 'No build needed'",
+  "buildCommand": "echo 'Static files only'",
   "outputDirectory": ".",
-  "routes": [
+  "public": false,
+  "env": {},
+  "regions": ["default"],
+  "functions": {},
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/(.+)",
+      "destination": "/$1"
     }
   ]
 }
