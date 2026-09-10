@@ -799,7 +799,7 @@
         // ============ Load Questions ============
         async function loadQuestionsAndContent() {
             try {
-                const response = await fetch('docs/legal-content.json');
+                const response = await fetch('./docs/questions.json');
                 const data = await response.json();
 
                 // Generate questions from content

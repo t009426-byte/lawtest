@@ -19,3 +19,18 @@ Thumbs.db
 # Temp
 .env.local
 *.tmp
+
+# Large files (keep only final-questions.json)
+docs/actual-content.json
+docs/extracted-questions.json
+docs/legal-content.json
+
+# PDFs
+*.pdf
+
+# Unnecessary docs
+DEPLOYMENT.md
+doc/
+read/
+master exam/
+CODED--/
