@@ -12,19 +12,19 @@
         }
 
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
+            --primary: #d4af37;
+            --secondary: #1a1a1a;
             --success: #28a745;
             --danger: #dc3545;
             --warning: #ffc107;
             --info: #17a2b8;
             --light: #f8f9fa;
-            --dark: #333;
+            --dark: #1a1a1a;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -134,14 +134,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #d4af37 0%, #1a1a1a 100%);
             color: white;
             margin-top: 30px;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
         }
 
         .exam-screen {
@@ -219,7 +219,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(90deg, #d4af37 0%, #1a1a1a 100%);
             transition: width 0.3s ease;
         }
 
@@ -344,11 +344,13 @@
         }
 
         .score-card {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #d4af37 0%, #2d2d2d 50%, #1a1a1a 100%);
             color: white;
             padding: 25px;
             border-radius: 12px;
             text-align: center;
+            border: 1px solid #d4af37;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
         .score-card.success {
