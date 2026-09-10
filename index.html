@@ -887,6 +887,20 @@
                     correctAnswerDiv.innerHTML = `<span class="answer-label">✅ الإجابة الصحيحة:</span> ${q.options[q.correct]}`;
                     reviewItem.appendChild(correctAnswerDiv);
 
+                    // Explanation from source files
+                    if (q.answer) {
+                        const explanationDiv = document.createElement('div');
+                        explanationDiv.style.background = '#e8f4f8';
+                        explanationDiv.style.border = '1px solid #17a2b8';
+                        explanationDiv.style.borderRadius = '4px';
+                        explanationDiv.style.padding = '10px';
+                        explanationDiv.style.marginTop = '10px';
+                        explanationDiv.style.color = '#0c5460';
+                        explanationDiv.style.fontSize = '0.95em';
+                        explanationDiv.innerHTML = `<strong>📚 الشرح من الملفات:</strong> ${q.answer}`;
+                        reviewItem.appendChild(explanationDiv);
+                    }
+
                     reviewContainer.appendChild(reviewItem);
                 } else {
                     correctCount++;
