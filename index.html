@@ -834,8 +834,10 @@
             let wrongCount = 0;
             questions.forEach((q, idx) => {
                 const isCorrect = userAnswers[idx] === q.correct;
+                const hasAnswered = userAnswers[idx] !== undefined;
 
-                if (!isCorrect && userAnswers[idx] !== undefined) {
+                // Show all wrong answers: either not answered or answered incorrectly
+                if (!isCorrect) {
                     wrongCount++;
                     const reviewItem = document.createElement('div');
                     reviewItem.className = 'review-item';
@@ -845,10 +847,17 @@
                     questionDiv.innerHTML = `<span style="color: var(--danger);">❌ السؤال ${idx + 1}:</span> ${q.text}`;
                     reviewItem.appendChild(questionDiv);
 
-                    const userAnswer = document.createElement('div');
-                    userAnswer.className = 'review-answer incorrect';
-                    userAnswer.innerHTML = `<span class="answer-label">إجابتك:</span> ${q.options[userAnswers[idx]]}`;
-                    reviewItem.appendChild(userAnswer);
+                    if (hasAnswered) {
+                        const userAnswer = document.createElement('div');
+                        userAnswer.className = 'review-answer incorrect';
+                        userAnswer.innerHTML = `<span class="answer-label">إجابتك:</span> ${q.options[userAnswers[idx]]}`;
+                        reviewItem.appendChild(userAnswer);
+                    } else {
+                        const userAnswer = document.createElement('div');
+                        userAnswer.className = 'review-answer incorrect';
+                        userAnswer.innerHTML = `<span class="answer-label">لم تجب:</span> <em>لم تختر إجابة</em>`;
+                        reviewItem.appendChild(userAnswer);
+                    }
 
                     const correctAnswer = document.createElement('div');
                     correctAnswer.className = 'review-answer correct';
